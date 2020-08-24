@@ -739,13 +739,16 @@ void ProcessRangeOperator(Model* model, RangeOperator* op) {
 
   int size = 0;
   if (start_dtype == ArrayDataType::kInt32) {
-    size = std::floor((limit_array.GetBuffer<ArrayDataType::kInt32>().data[0] -
-                       start_array.GetBuffer<ArrayDataType::kInt32>().data[0]) /
-                      delta_array.GetBuffer<ArrayDataType::kInt32>().data[0]);
+    size = std::floor(std::abs(
+                      (limit_array.GetBuffer<ArrayDataType::kInt32>().data[0] -
+                       start_array.GetBuffer<ArrayDataType::kInt32>().data[0] - 1) /
+                      delta_array.GetBuffer<ArrayDataType::kInt32>().data[0])
+                      ) + 1;
   } else if (start_dtype == ArrayDataType::kFloat) {
-    size = std::floor((limit_array.GetBuffer<ArrayDataType::kFloat>().data[0] -
-                       start_array.GetBuffer<ArrayDataType::kFloat>().data[0]) /
-                      delta_array.GetBuffer<ArrayDataType::kFloat>().data[0]);
+    size = std::floor(std::abs(
+                      (limit_array.GetBuffer<ArrayDataType::kFloat>().data[0] -
+                       start_array.GetBuffer<ArrayDataType::kFloat>().data[0] - 1) /
+                      delta_array.GetBuffer<ArrayDataType::kFloat>().data[0])) + 1;
   }
 
   // Only set the output shape. Contents are set by ResolveConstantRange.

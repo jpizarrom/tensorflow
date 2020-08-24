@@ -32,11 +32,11 @@ void FillRangeOutput(const Array& start_array, const Array& limit_array,
   int size =
       (std::is_integral<T>::value
            ? ((std::abs(limit - start) + std::abs(delta) - 1) / std::abs(delta))
-           : std::ceil(std::abs((limit - start) / delta)));
+           : std::floor(std::abs((limit - start - 1) / delta)) + 1 );
   for (int i = 0; i < size; ++i) {
     buffer.data.push_back(start + i * delta);
   }
-  CHECK_EQ(std::floor((limit - start) / delta), buffer.data.size());
+  CHECK_EQ(std::floor(std::abs((limit - start - 1) / delta)) + 1, buffer.data.size());
   CHECK_EQ(buffer.data.size(), output_array->shape().dims()[0]);
 }
 
